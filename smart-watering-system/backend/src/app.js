@@ -40,19 +40,31 @@ app.use("/api", authRoutes);
 const plantRoutes = require("./routes/plants.routes");
 app.use("/api", plantRoutes);
 
+const systemRoutes = require("./routes/system.routes");
+app.use("/api", systemRoutes);
+
 app.get("/api/admin/db", async (req, res) => {
   const authController = require("./controllers/auth.controller");
   const plantsController = require("./controllers/plants.controller");
+  const System = require("./models/System.model");
   
   try {
     const users = await authController.getUsers();
     const plants = await plantsController.getAllPlants();
+    let system = await System.findOne();
+    if (!system) {
+      system = { tankLevel: null, lastUpdated: null };
+    }
     
     res.json({
       message: "MongoDB database contents",
       storage: "MongoDB",
       users,
-      plants
+      plants,
+      system: {
+        tankLevel: system.tankLevel,
+        lastUpdated: system.lastUpdated
+      }
     });
   } catch (err) {
     res.status(500).json({ error: err.message });

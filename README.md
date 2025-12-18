@@ -143,10 +143,20 @@ npm run dev
   autoWater: Boolean,
   sensorData: {
     soilMoisture: Number (0-100, nullable),
-    tankLevel: Number (0-100, nullable),
     lastUpdated: Date
   },
   createdAt: Date
+}
+```
+
+### System
+
+```javascript
+{
+  tankLevel: Number (0-100, nullable),
+  lastUpdated: Date,
+  createdAt: Date,
+  updatedAt: Date
 }
 ```
 
@@ -161,9 +171,20 @@ Content-Type: application/json
 
 {
   "sensorData": {
-    "soilMoisture": 65,
-    "tankLevel": 80
+    "soilMoisture": 65
   }
+}
+```
+
+Update system tank level:
+
+```bash
+PUT /api/system/tank
+Authorization: token-{email}-{timestamp}
+Content-Type: application/json
+
+{
+  "tankLevel": 80
 }
 ```
 

@@ -18,13 +18,7 @@ const plantSchema = new mongoose.Schema({
   sensorData: {
     soilMoisture: {
       type: Number,
-      default: null, // null means sensor not connected
-      min: 0,
-      max: 100,
-    },
-    tankLevel: {
-      type: Number,
-      default: null, // null means sensor not connected
+      default: null,
       min: 0,
       max: 100,
     },

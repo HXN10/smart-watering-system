@@ -65,7 +65,6 @@ exports.addPlant = async (req, res) => {
       autoWater: false,
       sensorData: {
         soilMoisture: null,
-        tankLevel: null,
         lastUpdated: new Date(),
       },
     });
@@ -106,9 +105,6 @@ exports.updatePlant = async (req, res) => {
     if (req.body.sensorData) {
       if (req.body.sensorData.soilMoisture !== undefined) {
         plant.sensorData.soilMoisture = req.body.sensorData.soilMoisture;
-      }
-      if (req.body.sensorData.tankLevel !== undefined) {
-        plant.sensorData.tankLevel = req.body.sensorData.tankLevel;
       }
       plant.sensorData.lastUpdated = new Date();
     }

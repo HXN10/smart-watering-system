@@ -5,6 +5,23 @@ document.getElementById("logout").addEventListener("click", () => {
   window.location.href = "./login.html";
 });
 
+async function loadTankLevel() {
+  try {
+    const data = await apiFetch("/api/system", { method: "GET" });
+    const tankLevelEl = document.getElementById("tankLevel");
+    if (data.tankLevel !== null && data.tankLevel !== undefined) {
+      tankLevelEl.textContent = `${data.tankLevel}%`;
+      tankLevelEl.style.color = "var(--secondary)";
+    } else {
+      tankLevelEl.textContent = "N/A";
+      tankLevelEl.style.color = "var(--text-secondary)";
+    }
+  } catch (err) {
+    console.error("Failed to load tank level:", err);
+    document.getElementById("tankLevel").textContent = "N/A";
+  }
+}
+
 async function loadPlants() {
   try {
     const data = await apiFetch("/api/plants", {
@@ -19,11 +36,7 @@ async function loadPlants() {
             const moisture = plant.sensorData?.soilMoisture !== null && plant.sensorData?.soilMoisture !== undefined 
               ? `${plant.sensorData.soilMoisture}%` 
               : 'N/A';
-            const tank = plant.sensorData?.tankLevel !== null && plant.sensorData?.tankLevel !== undefined 
-              ? `${plant.sensorData.tankLevel}%` 
-              : 'N/A';
             const moistureColor = plant.sensorData?.soilMoisture !== null ? 'var(--primary)' : 'var(--text-secondary)';
-            const tankColor = plant.sensorData?.tankLevel !== null ? 'var(--secondary)' : 'var(--text-secondary)';
             
             return `
         <div class="plant-item" data-plant-id="${plant.id}" style="padding: 16px; margin-bottom: 16px; background: rgba(16, 185, 129, 0.05); border-radius: 12px; border-left: 4px solid var(--primary);">
@@ -40,14 +53,10 @@ async function loadPlants() {
               </button>
             </div>
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
+          <div style="margin-top: 12px;">
             <div style="padding: 12px; background: rgba(16, 185, 129, 0.1); border-radius: 8px;">
               <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">Soil Moisture</div>
               <div style="font-size: 20px; font-weight: 700; color: ${moistureColor};">${moisture}</div>
-            </div>
-            <div style="padding: 12px; background: rgba(59, 130, 246, 0.1); border-radius: 8px;">
-              <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">Tank Level</div>
-              <div style="font-size: 20px; font-weight: 700; color: ${tankColor};">${tank}</div>
             </div>
           </div>
         </div>
@@ -281,4 +290,5 @@ function attachPlantEventListeners() {
   });
 }
 
+loadTankLevel();
 loadPlants();
