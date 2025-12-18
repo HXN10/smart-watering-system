@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:6.0
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  backend:
+    build: ./backend
+    working_dir: /app
+    command: npm run dev
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend:/app
+    environment:
+      - NODE_ENV=development
+      - MONGO_URI=mongodb://mongo:27017/watering
+
+  frontend-static:
+    image: python:3.11-slim
+    command: sh -c "cd /srv/frontend && python -m http.server 8000"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../frontend:/srv/frontend
+    working_dir: /srv/frontend
+
+volumes:
+  mongo-data:
