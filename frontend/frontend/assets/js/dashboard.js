@@ -1,13 +1,10 @@
-// Check authentication
 requireAuth();
 
-// Logout functionality
 document.getElementById("logout").addEventListener("click", () => {
   localStorage.removeItem("token");
   window.location.href = "./login.html";
 });
 
-// Load plants
 async function loadPlants() {
   try {
     const data = await apiFetch("/api/plants", {
@@ -59,7 +56,6 @@ async function loadPlants() {
         )
         .join("");
       
-      // Add event listeners for edit and delete buttons
       attachPlantEventListeners();
     } else {
       plantList.innerHTML =
@@ -72,34 +68,25 @@ async function loadPlants() {
   }
 }
 
-// Sensor data is now loaded per plant in loadPlants()
-// This function is kept for future ESP32 integration
 async function loadSensorData() {
-  // Sensor data is now part of each plant
-  // When ESP32 connects, update sensor data via PUT /api/plants/:id
-  // with sensorData: { soilMoisture: X, tankLevel: Y }
 }
 
-// Add Plant functionality
 const addPlantBtn = document.getElementById("addPlantBtn");
 const addPlantForm = document.getElementById("addPlantForm");
 const plantForm = document.getElementById("plantForm");
 const cancelAddBtn = document.getElementById("cancelAddBtn");
 
 addPlantBtn.addEventListener("click", () => {
-  // Reset form state
   plantForm.reset();
   const submitBtn = plantForm.querySelector('button[type="submit"]');
   const cancelBtn = plantForm.querySelector('#cancelAddBtn');
   const nameInput = document.getElementById("plantName");
   
-  // Ensure all inputs are enabled
   submitBtn.disabled = false;
   cancelBtn.disabled = false;
   nameInput.disabled = false;
   submitBtn.textContent = "Add";
   
-  // Show form and hide button
   addPlantForm.style.display = "block";
   addPlantBtn.style.display = "none";
   nameInput.focus();
@@ -124,7 +111,6 @@ plantForm.addEventListener("submit", async (e) => {
   const cancelBtn = plantForm.querySelector('#cancelAddBtn');
   const originalText = submitBtn.textContent;
   
-  // Disable form inputs
   submitBtn.disabled = true;
   cancelBtn.disabled = true;
   document.getElementById("plantName").disabled = true;
@@ -136,27 +122,22 @@ plantForm.addEventListener("submit", async (e) => {
       body: { name: plantName },
     });
 
-    // Reset form state
     plantForm.reset();
     submitBtn.textContent = originalText;
     submitBtn.disabled = false;
     cancelBtn.disabled = false;
     document.getElementById("plantName").disabled = false;
 
-    // Hide form and show button
     addPlantForm.style.display = "none";
     addPlantBtn.style.display = "block";
 
-    // Reload plants
     await loadPlants();
     
-    // Show success message
     showMessage("Plant added successfully!", "success");
   } catch (err) {
     console.error("Failed to add plant:", err);
     showMessage(err.message || "Failed to add plant. Please try again.", "error");
     
-    // Re-enable form inputs on error
     submitBtn.textContent = originalText;
     submitBtn.disabled = false;
     cancelBtn.disabled = false;
@@ -164,7 +145,6 @@ plantForm.addEventListener("submit", async (e) => {
   }
 });
 
-// Show message function
 function showMessage(message, type) {
   const messageEl = document.createElement("div");
   messageEl.style.cssText = `
@@ -223,9 +203,7 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Attach event listeners for plant actions
 function attachPlantEventListeners() {
-  // Delete buttons
   document.querySelectorAll(".delete-plant-btn").forEach(btn => {
     btn.addEventListener("click", async (e) => {
       const plantId = e.target.dataset.plantId;
@@ -249,14 +227,12 @@ function attachPlantEventListeners() {
     });
   });
 
-  // Edit buttons
   document.querySelectorAll(".edit-plant-btn").forEach(btn => {
     btn.addEventListener("click", (e) => {
       const plantId = e.target.dataset.plantId;
       const plantName = e.target.dataset.plantName;
       const plantItem = e.target.closest(".plant-item");
       
-      // Create edit form
       const editForm = `
         <div style="margin-top: 12px; padding: 12px; background: var(--card-bg); border-radius: 8px; border: 1px solid var(--border);">
           <form class="edit-plant-form" data-plant-id="${plantId}" style="display: flex; gap: 8px; align-items: flex-end;">
@@ -275,7 +251,6 @@ function attachPlantEventListeners() {
       plantItem.insertAdjacentHTML("beforeend", editForm);
       plantItem.querySelector(".edit-plant-name").focus();
       
-      // Handle form submission
       plantItem.querySelector(".edit-plant-form").addEventListener("submit", async (e) => {
         e.preventDefault();
         const newName = plantItem.querySelector(".edit-plant-name").value.trim();
@@ -299,7 +274,6 @@ function attachPlantEventListeners() {
         }
       });
 
-      // Handle cancel
       plantItem.querySelector(".cancel-edit-btn").addEventListener("click", () => {
         plantItem.querySelector(".edit-plant-form").closest("div").remove();
       });
@@ -307,5 +281,4 @@ function attachPlantEventListeners() {
   });
 }
 
-// Initialize dashboard
 loadPlants();

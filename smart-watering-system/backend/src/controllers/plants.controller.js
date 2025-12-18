@@ -15,14 +15,13 @@ exports.getAllPlants = async () => {
   return grouped;
 };
 
-// Extract email from token (format: token-email-timestamp)
 const extractUserId = (token) => {
   if (!token || !token.startsWith("token-")) return "demo-user";
   const parts = token.split("-");
   if (parts.length >= 3) {
-    return parts.slice(1, -1).join("-"); // Get email part (everything between "token-" and last timestamp)
+    return parts.slice(1, -1).join("-");
   }
-  return token; // Fallback to full token
+  return token;
 };
 
 exports.getPlants = async (req, res) => {

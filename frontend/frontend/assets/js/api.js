@@ -14,12 +14,10 @@ async function apiFetch(path, { method = "GET", body, headers = {} } = {}) {
       body: body ? JSON.stringify(body) : undefined,
     });
 
-    // Check if response is ok before trying to parse JSON
     let data;
     try {
       data = await res.json();
     } catch (e) {
-      // If response is not JSON, check status
       if (!res.ok) {
         throw new Error(`Request failed: ${res.status} ${res.statusText}`);
       }
@@ -31,7 +29,6 @@ async function apiFetch(path, { method = "GET", body, headers = {} } = {}) {
     }
     return data;
   } catch (error) {
-    // Handle network errors
     if (error.message.includes("Failed to fetch") || error.message.includes("NetworkError")) {
       throw new Error("Cannot connect to server. Make sure the backend is running on http://localhost:3001");
     }

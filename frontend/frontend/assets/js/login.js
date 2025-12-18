@@ -1,19 +1,15 @@
-// Tab switching
 document.querySelectorAll(".tab-btn").forEach((button) => {
   button.addEventListener("click", () => {
     const tab = button.dataset.tab;
     
-    // Update active tab button
     document.querySelectorAll(".tab-btn").forEach((btn) => btn.classList.remove("active"));
     button.classList.add("active");
     
-    // Update active form
     document.querySelectorAll(".auth-form").forEach((form) => form.classList.remove("active"));
     document.querySelector(`.auth-form[data-form="${tab}"]`).classList.add("active");
   });
 });
 
-// Login form
 document.getElementById("loginFormElement").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -27,8 +23,6 @@ document.getElementById("loginFormElement").addEventListener("submit", async (e)
     return;
   }
 
-  // Set loading state
-  // Disable form inputs while awaiting response
   const formEl = e.target;
   disableForm(formEl, true);
   submitBtn.innerHTML = '<span>Signing in...</span>';
@@ -51,13 +45,11 @@ document.getElementById("loginFormElement").addEventListener("submit", async (e)
   } catch (err) {
     console.error("Login error:", err);
   showFormError(err.message || "Login failed. Please try again.");
-  // Re-enable form inputs
   disableForm(formEl, false);
   submitBtn.innerHTML = originalBtnText;
   }
 });
 
-// Signup form
 document.getElementById("signupFormElement").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -76,8 +68,6 @@ document.getElementById("signupFormElement").addEventListener("submit", async (e
     return;
   }
 
-  // Set loading state
-  // Disable form inputs while awaiting response
   const formEl = e.target;
   disableForm(formEl, true);
   submitBtn.innerHTML = '<span>Creating account...</span>';
@@ -100,18 +90,15 @@ document.getElementById("signupFormElement").addEventListener("submit", async (e
   } catch (err) {
     console.error("Signup error:", err);
   showFormError(err.message || "Signup failed. Please try again.");
-  // Re-enable inputs on error
   disableForm(formEl, false);
   submitBtn.innerHTML = originalBtnText;
   }
 });
 
-// Helper: disable/enable all controls in a form
 function disableForm(formEl, disabled = true) {
   try {
     const controls = Array.from(formEl.elements || []);
     controls.forEach((c) => {
-      // keep fieldset and hidden elements intact
       if (c && typeof c.disabled !== 'undefined') c.disabled = disabled;
     });
   } catch (e) {
@@ -119,7 +106,6 @@ function disableForm(formEl, disabled = true) {
   }
 }
 
-// Error and success message handlers
 function showFormError(message) {
   removeFormMessages();
   const alertEl = document.createElement("div");

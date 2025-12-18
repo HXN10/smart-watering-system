@@ -6,7 +6,7 @@ require("dotenv").config();
 
 const app = express();
 app.use(cors({
-  origin: "*", // Allow all origins
+  origin: "*",
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: false
@@ -17,7 +17,6 @@ app.get("/health", (req, res) => {
   res.json({ status: "OK", service: "Smart Watering Backend" });
 });
 
-// MongoDB connection is required
 const MONGO_URI = process.env.MONGO_URI || process.env.DATABASE_URL;
 if (!MONGO_URI) {
   console.error("ERROR: MONGO_URI environment variable is required");
@@ -41,7 +40,6 @@ app.use("/api", authRoutes);
 const plantRoutes = require("./routes/plants.routes");
 app.use("/api", plantRoutes);
 
-// Admin endpoint to view database (for development)
 app.get("/api/admin/db", async (req, res) => {
   const authController = require("./controllers/auth.controller");
   const plantsController = require("./controllers/plants.controller");
