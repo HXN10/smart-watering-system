@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Database Viewer | Smart Watering System</title>
+  <link rel="stylesheet" href="./styles/main.css" />
+  <style>
+    .admin-container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    .data-section {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+    .data-section h2 {
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      font-size: 20px;
+    }
+    .data-section pre {
+      background: var(--input-bg);
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 13px;
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    .refresh-btn {
+      padding: 10px 20px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .refresh-btn:hover {
+      background: var(--primary-dark);
+    }
+    .warning {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+    }
+  </style>
+</head>
+<body class="dashboard-page">
+  <div class="admin-container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+      <h1>📊 Database Viewer</h1>
+      <a href="./login.html" style="color: var(--primary); text-decoration: none;">← Back to Login</a>
+    </div>
+
+    <div class="warning">
+      ⚠️ <strong>Note:</strong> This is in-memory storage. Data will be lost when the server restarts.
+      To use persistent storage, set up MongoDB (see instructions below).
+    </div>
+
+    <button class="refresh-btn" onclick="loadData()">🔄 Refresh Data</button>
+
+    <div class="data-section">
+      <h2>👥 Users</h2>
+      <pre id="usersData">Loading...</pre>
+    </div>
+
+    <div class="data-section">
+      <h2>🌿 Plants</h2>
+      <pre id="plantsData">Loading...</pre>
+    </div>
+
+    <div class="data-section">
+      <h2>📝 How to Set Up MongoDB (Persistent Storage)</h2>
+      <ol style="color: var(--text-primary); line-height: 1.8;">
+        <li>Start MongoDB using Docker Compose:
+          <pre style="margin-top: 8px;">cd smart-watering-system
+docker-compose up mongo</pre>
+        </li>
+        <li>Set the MONGO_URI environment variable:
+          <pre style="margin-top: 8px;">export MONGO_URI="mongodb://localhost:27017/watering"</pre>
+        </li>
+        <li>Update the controllers to use Mongoose models instead of in-memory objects</li>
+        <li>View data using MongoDB Compass or: <code>mongosh mongodb://localhost:27017/watering</code></li>
+      </ol>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = "http://localhost:3001";
+
+    async function loadData() {
+      try {
+        const response = await fetch(`${API_BASE}/api/admin/db`);
+        const data = await response.json();
+        
+        document.getElementById("usersData").textContent = JSON.stringify(data.users, null, 2);
+        document.getElementById("plantsData").textContent = JSON.stringify(data.plants, null, 2);
+      } catch (err) {
+        document.getElementById("usersData").textContent = `Error: ${err.message}`;
+        document.getElementById("plantsData").textContent = `Error: ${err.message}`;
+      }
+    }
+
+    loadData();
+    setInterval(loadData, 5000);
+  </script>
+</body>
+</html>
+

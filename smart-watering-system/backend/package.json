@@ -1,0 +1,25 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+ "scripts": {
+  "dev": "nodemon src/server.js",
+  "start": "node src/server.js",
+  "start-all": "concurrently \"npm run dev\" \"python3 -m http.server 8000 --directory ../..\""
+},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.5",
+  "dotenv": "^17.2.3",
+  "express": "^5.2.1",
+  "mongoose": "^7.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11",
+    "concurrently": "^8.0.1"
+  }
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Watering Dashboard</title>
+  <link rel="stylesheet" href="./styles/main.css" />
+</head>
+<body class="dashboard-page">
+  <div class="dashboard-container">
+    <div class="dashboard-header">
+  <h1>🌱 Smart Watering Dashboard</h1>
+      <button id="logout" class="btn-logout">Logout</button>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h2>🌿 My Plants</h2>
+          <button id="addPlantBtn" class="btn-add-plant" style="padding: 8px 16px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px;">
+            + Add Plant
+          </button>
+        </div>
+        
+        <!-- Add Plant Form (hidden by default) -->
+        <div id="addPlantForm" style="display: none; margin-bottom: 20px; padding: 16px; background: var(--input-bg); border-radius: 12px; border: 1px solid var(--border);">
+          <form id="plantForm" style="display: flex; gap: 8px; align-items: flex-end;">
+            <div style="flex: 1;">
+              <label for="plantName" style="display: block; font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px;">Plant Name</label>
+              <input type="text" id="plantName" placeholder="e.g., Basil, Tomato..." required 
+                     style="width: 100%; padding: 10px 12px; border: 2px solid var(--input-border); border-radius: 8px; font-size: 14px; background: var(--card-bg); color: var(--text-primary);">
+            </div>
+            <button type="submit" style="padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px;">
+              Add
+            </button>
+            <button type="button" id="cancelAddBtn" style="padding: 10px 16px; background: var(--muted); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px;">
+              Cancel
+            </button>
+          </form>
+        </div>
+        
+        <div id="plantList" style="min-height: 100px; color: var(--text-secondary);">
+          <p style="text-align: center; padding: 20px;">No plants yet. Add your first plant!</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="./frontend/assets/js/api.js"></script>
+  <script src="./frontend/assets/js/auth.js"></script>
+  <script src="./frontend/assets/js/dashboard.js"></script>
+</body>
+</html>
